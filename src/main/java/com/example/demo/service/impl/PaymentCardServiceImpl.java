@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.PaymentCardCreateDto;
 import com.example.demo.dto.PaymentCardResponseDto;
+import com.example.demo.dto.PaymentCardUpdateDto;
 import com.example.demo.utils.PaymentCardMapper;
 import com.example.demo.model.PaymentCard;
 import com.example.demo.model.User;
@@ -65,7 +66,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
-    public PaymentCardResponseDto updateCard(Long cardId, PaymentCardCreateDto dto) {
+    public PaymentCardResponseDto updateCard(Long cardId, PaymentCardUpdateDto dto) {
         PaymentCard card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
 
