@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PaymentCardCreateDto;
 import com.example.demo.dto.PaymentCardResponseDto;
+import com.example.demo.dto.PaymentCardUpdateDto;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface PaymentCardService {
 
     PaymentCardResponseDto getCardById(Long cardId);
 
-    PaymentCardResponseDto updateCard(Long cardId, PaymentCardCreateDto dto);
+    PaymentCardResponseDto updateCard(Long cardId, PaymentCardUpdateDto dto);
 
     void activateCard(Long cardId, boolean active);
 
