@@ -3,12 +3,10 @@ package com.example.demo.service;
 import com.example.demo.dto.UserCreateDto;
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserUpdateDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
-
-    List<UserResponseDto> getAllUsers();
+    Page<UserResponseDto> getAllUsers(int page, int size);
 
     UserResponseDto getUserById(Long id);
 
@@ -20,3 +18,4 @@ public interface UserService {
 
     void activateUser(Long id, boolean active);
 }
+

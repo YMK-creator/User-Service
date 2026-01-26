@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.PaymentCardCreateDto;
 import com.example.demo.dto.PaymentCardResponseDto;
 import com.example.demo.dto.PaymentCardUpdateDto;
+import com.example.demo.exception.BusinessException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.utils.PaymentCardMapper;
 import com.example.demo.model.PaymentCard;
 import com.example.demo.model.User;
@@ -10,6 +12,9 @@ import com.example.demo.repository.PaymentCardRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.PaymentCardService;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +39,11 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     @Transactional
     public PaymentCardResponseDto createCard(Long userId, PaymentCardCreateDto dto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         long cardCount = cardRepository.findAllByUserId(userId).size();
         if (cardCount >= 5) {
-            throw new RuntimeException("User already has 5 payment cards");
+            throw new BusinessException("User already has 5 payment cards");
         }
 
         PaymentCard card = cardMapper.toEntity(dto);
@@ -50,6 +55,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Cacheable(value = "user_cards", key = "#userId")
     public List<PaymentCardResponseDto> getCardsByUserId(Long userId) {
         return cardRepository.findAllByUserId(userId)
                 .stream()
@@ -58,6 +64,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Cacheable(value = "cardCache", key = "#cardId")
     public PaymentCardResponseDto getCardById(Long cardId) {
         PaymentCard card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
@@ -66,6 +73,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "cardCache", key = "#cardId")
     public PaymentCardResponseDto updateCard(Long cardId, PaymentCardUpdateDto dto) {
         PaymentCard card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
@@ -89,6 +97,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "cardCache", key = "#cardId")
     public void deleteCard(Long cardId) {
         cardRepository.deleteById(cardId);
     }
