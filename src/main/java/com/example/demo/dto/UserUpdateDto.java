@@ -13,7 +13,7 @@ public class UserUpdateDto {
     private String surname;
 
     @Past
-    private LocalDate birthDate;
+    private LocalDate birthday;
 
     @Email
     private String email;

@@ -5,11 +5,10 @@ import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserUpdateDto;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -21,8 +20,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponseDto>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(userService.getAllUsers(page, size));
     }
 
     @GetMapping("/{id}")
