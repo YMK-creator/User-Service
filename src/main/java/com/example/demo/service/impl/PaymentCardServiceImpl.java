@@ -89,10 +89,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     @Override
     @Transactional
     public void activateCard(Long cardId, boolean active) {
-        PaymentCard card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found"));
-        card.setActive(active);
-        cardRepository.save(card);
+        cardRepository.updateActive(cardId, active);
     }
 
     @Override
