@@ -44,7 +44,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     needs: build-test-analyze
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/pepiline'
 
     steps:
       - name: Checkout code
