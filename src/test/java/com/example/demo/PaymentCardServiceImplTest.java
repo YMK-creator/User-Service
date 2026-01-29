@@ -168,8 +168,7 @@ class PaymentCardServiceImplTest {
 
         cardService.activateCard(cardId, true);
 
-        assertThat(card.getActive()).isTrue();
-        verify(cardRepository).save(card);
+        verify(cardRepository).updateActive(cardId, true);
     }
 
     @Test
