@@ -15,15 +15,16 @@ public class SecurityConfig {
     SecurityFilterChain security(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/admin/**").hasRole("Admin")
-                        .requestMatchers("/user/**").hasRole("User")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) -> oauth2
+                .oauth2ResourceServer(oauth -> oauth
                         .jwt(Customizer.withDefaults())
-                )
-                .oauth2Login(Customizer.withDefaults());
+                );
+
         return http.build();
     }
 }
